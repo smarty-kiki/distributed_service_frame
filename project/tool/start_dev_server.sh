@@ -21,7 +21,7 @@ do
     fi
 done<$DEP_FILE
 
-sudo docker run --rm -ti -p 80:80 -p 3306:3306 --name distributed_service_frame \
+sudo docker run --rm -ti --name distributed_service_frame \
     -v $ROOT_DIR/:/var/www/distributed_service_frame $DEP_SERVICE_VOLUMN \
     -v $ROOT_DIR/project/config/development/nginx/distributed_service_frame.conf:/etc/nginx/sites-enabled/default \
 kikiyao/debian_php_dev_env start
