@@ -49,7 +49,7 @@ do
     fi
 done<$DEP_CLI_FILE
 
-sudo docker run --rm -ti --name distributed_service_frame \
+docker run --rm -ti --name distributed_service_frame \
     $LINK $DEP_VOLUMN \
     -v $ROOT_DIR/:/var/www/distributed_service_frame \
     -v $ROOT_DIR/project/config/development/nginx/distributed_service_frame.conf:/etc/nginx/sites-enabled/default \
