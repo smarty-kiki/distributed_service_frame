@@ -9,7 +9,7 @@ return [
         'password' => 'password',
 
         'read' => [
-            '/var/run/mysqld/mysqld.sock',
+            'distributed_service_frame' => 3306,
         ],
     ],
 
