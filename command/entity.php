@@ -34,7 +34,7 @@ class %s extends entity
         if ($relationship['relation_name'] === $relationship['relate_to']) {
             $relationship_str[] = "\$this->{$relationship['type']}('{$relationship['relate_to']}');";
         } else {
-            $relationship_str[] = "\$this->{$relationship['type']}('{$relationship['relation_name']}', '{$relationship['relate_to']}');";
+            $relationship_str[] = "\$this->{$relationship['type']}('{$relationship['relation_name']}', '{$relationship['relate_to']}', '{$relationship['relation_name']}_id');";
         }
     }
 
@@ -47,7 +47,7 @@ function _generate_dao_file($entity_name, $entity_structs, $entity_relationships
 
 class {$entity_name}_dao extends dao
 {
-    protected \$table_name = '".$entity_name."';
+    protected \$table_name = '{$entity_name}';
     protected \$db_config_key = '".unit_of_work_db_config_key()."';
 }";
 }/*}}}*/
@@ -92,7 +92,7 @@ drop table `%s`;";
     foreach ($entity_relationships as $relationship) {
         if ($relationship['type'] === 'belongs_to') {
             $columns[] = "`{$relationship['relate_to']}_id` bigint(20) NOT NULL,";
-            $indexs[] = "KEY `fk_{$entity_name}_{$relationship['relate_to']}_idx` (`{$relationship['relate_to']}_id`),";
+            $indexs[] = "KEY `fk_{$entity_name}_{$relationship['relate_to']}_idx` (`{$relationship['relation_name']}_id`),";
         }
     }
 
@@ -187,13 +187,14 @@ command('entity:make-from-db', '从数据库表结构初始化 entity、dao、mi
                 continue;
             }
 
-            preg_match('/^KEY.*\(`(.*)`\)/', $line, $matches);
+            preg_match('/^KEY `fk_'.$entity_name.'_(.*)_idx` \(`(.*)`\)/', $line, $matches);
             if ($matches) {
-                $relate_to = str_replace('_id', '', $matches[1]);
+                $relate_to = preg_replace('/[0-9]/', '', $matches[1]);
+                $relation_name = str_replace('_id', '', $matches[2]);
                 $entity_relationships[] = [
                     'type' => 'belongs_to',
                     'relate_to' => $relate_to,
-                    'relation_name' => $relate_to,
+                    'relation_name' => $relation_name,
                 ];
             }
         }
