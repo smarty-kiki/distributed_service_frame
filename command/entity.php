@@ -153,7 +153,7 @@ command('entity:make', '初始化 entity、dao、migration', function ()
 
 command('entity:make-from-db', '从数据库表结构初始化 entity、dao、migration', function ()
 {/*{{{*/
-    $table_infos = db_query('show tables');
+    $table_infos = db_query('show tables', [], unit_of_work_db_config_key());
 
     foreach ($table_infos as $table_info) {
         $entity_structs = $entity_relationships = [];
@@ -163,7 +163,7 @@ command('entity:make-from-db', '从数据库表结构初始化 entity、dao、mi
             continue;
         }
 
-        $schema_infos = db_query("show create table `$table`");
+        $schema_infos = db_query("show create table `$table`", [], unit_of_work_db_config_key());
         $schema_info = reset($schema_infos);
 
         foreach (explode("\n", $schema_info['Create Table']) as $line) {
