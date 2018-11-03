@@ -15,6 +15,7 @@ define('DEP_QUEUE_JOB_DIR', ROOT_DIR.'/dep_queue_job');
 include FRAME_DIR.'/function.php';
 include FRAME_DIR.'/otherwise.php';
 include FRAME_DIR.'/unitofwork.php';
+include FRAME_DIR.'/log/file.php';
 
 config_dir(ROOT_DIR.'/config');
 unit_of_work_db_config_key('distributed');
