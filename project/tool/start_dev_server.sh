@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOT_DIR="$(cd "$(dirname $0)" && pwd)"/../../
+ROOT_DIR="$(cd "$(dirname $0)" && pwd)"/../..
 
 DEP_SERVICE_FILE=$ROOT_DIR/dep_service_list
 if [ ! -f $DEP_SERVICE_FILE ]
@@ -53,4 +53,5 @@ docker run --rm -ti -h distributed_service_frame --name distributed_service_fram
     $LINK $DEP_VOLUMN \
     -v $ROOT_DIR/:/var/www/distributed_service_frame \
     -v $ROOT_DIR/project/config/development/nginx/distributed_service_frame.conf:/etc/nginx/sites-enabled/default \
+    -e 'TIMEZONE=Asia/Shanghai' \
 kikiyao/debian_php_dev_env start
