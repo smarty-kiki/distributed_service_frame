@@ -18,3 +18,4 @@ mv $ROOT_DIR/project/config/production/nginx/distributed_service_frame.conf $ROO
 sed_name $ROOT_DIR/project/config/development/nginx/$1.conf $1
 sed_name $ROOT_DIR/project/config/production/nginx/$1.conf $1
 sed_name $ROOT_DIR/project/tool/start_dev_server.sh $1
+sed_name $ROOT_DIR/project/tool/after_dev_env_start.sh $1
