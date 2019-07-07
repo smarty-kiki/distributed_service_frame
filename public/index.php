@@ -2,7 +2,7 @@
 
 // init
 include __DIR__.'/../bootstrap.php';
-include FRAME_DIR.'/http/distributed_service.php';
+include FRAME_DIR.'/http/php_fpm/distributed_service.php';
 
 set_error_handler('service_err_serialize', E_ALL);
 set_exception_handler('service_ex_serialize');
