@@ -8,6 +8,7 @@ define('FRAME_DIR', ROOT_DIR.'/frame');
 define('DOMAIN_DIR', ROOT_DIR.'/domain');
 define('CLIENT_DIR', ROOT_DIR.'/client');
 define('COMMAND_DIR', ROOT_DIR.'/command');
+define('SERVICE_DIR', ROOT_DIR.'/service');
 define('DEP_DOMAIN_DIR', ROOT_DIR.'/dep_domain');
 define('DEP_CLIENT_DIR', ROOT_DIR.'/dep_client');
 define('DEP_QUEUE_JOB_DIR', ROOT_DIR.'/dep_queue_job');

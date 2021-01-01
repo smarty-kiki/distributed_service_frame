@@ -53,6 +53,8 @@ docker run --rm -ti -h distributed_service_frame --name distributed_service_fram
     $LINK $DEP_VOLUMN \
     -v $ROOT_DIR/:/var/www/distributed_service_frame \
     -v $ROOT_DIR/project/config/development/nginx/distributed_service_frame.conf:/etc/nginx/sites-enabled/default \
+    -e 'PRJ_HOME=/var/www/distributed_service_frame' \
+    -e 'ENV=development' \
     -e 'TIMEZONE=Asia/Shanghai' \
-    -e 'AFTER_START_SHELL=/var/www/distributed_service_frame/project/tool/after_dev_env_start.sh' \
+    -e 'AFTER_START_SHELL=/var/www/distributed_service_frame/project/tool/development/after_env_start.sh' \
 kikiyao/debian_php_dev_env start

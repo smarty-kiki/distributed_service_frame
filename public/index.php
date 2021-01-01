@@ -9,7 +9,7 @@ set_exception_handler('service_ex_serialize');
 register_shutdown_function('service_fatel_err_serialize');
 
 // init service
-include '../service/demo.php';
+include SERVICE_DIR.'/demo.php';
 
 // fix
 service_method_not_found();

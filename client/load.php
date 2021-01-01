@@ -1,6 +1,6 @@
 <?php
 
-include_once FRAME_DIR.'/http/php_frame/distributed_client.php';
+include_once FRAME_DIR.'/http/php_fpm/distributed_client.php';
 
 config_dir(__DIR__.'/config');
 
