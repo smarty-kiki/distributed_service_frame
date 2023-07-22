@@ -1,33 +1,42 @@
-if_post('/{{ english_word_pluralize($entity_name) }}/add', function ()
-{/*{^^{^^{*/
 @php
-$input_infos = [];
+$otherwise_infos = [];
 $param_infos = [];
 $setting_lines = [];
 foreach ($relationship_infos['relationships'] as $attribute_name => $relationship) {
     $entity = $relationship['entity'];
     if ($relationship['relationship_type'] === 'belongs_to') {
         if ($relationship['association_type'] === 'composition') {
-            $param_infos[] = "input_entity('$entity', null, '$attribute_name"."_id')";
+            $param_infos[] = "$$attribute_name";
+            $otherwise_infos[] = "otherwise($$attribute_name instanceof $entity, '$$attribute_name 传入了无效的 $entity')";
         } else {
-            $setting_lines[] = "$$entity_name->$attribute_name = dao('$entity')->find(input('{$attribute_name}_id'))";
+            $setting_lines[] = "$$entity_name->$attribute_name = \$optional_structs['$attribute_name']";
         }
     }
 }
 foreach ($entity_info['structs'] as $struct_name => $struct) {
-    $input_infos[] = "$$struct_name = input('$struct_name')";
 
     if ($struct['require']) {
         $param_infos[] = "$$struct_name";
     } else {
-        $setting_lines[] = "$$entity_name->$struct_name = $$struct_name";
+        $setting_lines[] = "$$entity_name->$struct_name = \$optional_structs['$struct_name']";
     }
 }
+$service_param_infos = $param_infos;
+if ($setting_lines) {
+    $service_param_infos[] = '$optional_structs = []';
+}
 @endphp
-@foreach ($input_infos as $input_info)
-    {{ $input_info }};
+@if ($service_param_infos)
+service('{{ $entity_name }}@create', function (
+    {{ implode(",\n    ", $service_param_infos)."\n" }}
+) {/*{^^{^^{*/
+@else
+service('{{ $entity_name }}@create', function ()
+{/*{^^{^^{*/
+@endif
+@foreach ($otherwise_infos as $otherwise_info)
+    {{ $otherwise_info }};
 @endforeach
-
 @if ($entity_info['repeat_check_structs'])
 @php
 $repeat_check_structs = $entity_info['repeat_check_structs'];
@@ -38,6 +47,7 @@ foreach ($repeat_check_structs as $struct_name) {
     $msg_infos[] = $entity_info['structs'][$struct_name]['display_name'];
 }
 @endphp
+
     $another_{{ $entity_name }} = dao('{{ $entity_name }}')->find_by_{{ implode('_and_', $repeat_check_structs) }}({{ implode(', ', $dao_param_infos) }});
     otherwise($another_{{ $entity_name }}->is_null(), '已经存在相同{{ implode('和', $msg_infos) }}的{{ $entity_info['display_name'] }} [ID: '.$another_{{ $entity_name }}->id.']');
 @endif
@@ -56,8 +66,5 @@ foreach ($repeat_check_structs as $struct_name) {
 @endforeach
 @endif
 
-    return [
-        'code' => 0,
-        'msg' => '',
-    ];
+    return ${{ $entity_name }};
 });/*}}}*/
